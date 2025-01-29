@@ -4,7 +4,10 @@
     <title>Spring Security Example</title>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
+    <div th:replace="fragments/header :: header"></div>
+    <h1>Профиль пользователя: <p th:text="${user.getName}"></p> </h1>
+    <p>У вас есть следующие права доступа:</p>
+    <p th:text="${user.getRoles()}"></p>
 
 
 </body>
