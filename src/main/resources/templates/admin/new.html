@@ -14,9 +14,17 @@
                 <label for="name">Имя пользователя:</label>
                 <input type="text" th:field="*{name}" id="name" placeholder="Write name" />
                     <br><br>
+                <label for="lastname">Фамилия:</label>
+                <input type="text" th:field="*{lastname}" id="lastname" placeholder="Write lastname" />
+                    <br><br>
                 <label for="password">Пароль:</label>
                 <input type="password" th:field="*{password}" id="password" placeholder="Write password" />
                     <br><br>
+                <label for="age">Возраст:</label>
+                <input type="number" th:field="*{age}" id="age" placeholder="Write age" />
+                    <br><br>
+                <label for="email">Электронная почта:</label>
+                <input type="email" th:field="*{email}" id="email" placeholder="Write email" />
                 <p>
                     <label>Роли:
                         <input type="checkbox" name="roles"

@@ -28,7 +28,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(getPasswordEncoder());
     }
 
-
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -36,17 +35,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+         http.csrf().disable()
                 .authorizeRequests()
                     .antMatchers("/", "/index", "/logout").permitAll()
                     .antMatchers("/admin/**", "/header").hasRole("ADMIN")
-                    .antMatchers("/user/**").hasRole("USER")
+                    .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated()
-                .and()
+                    .and()
                 .formLogin()
                     .successHandler(successUserHandler)
                     .permitAll()
-                .and()
+                    .and()
                 .logout()
                     .permitAll();
     }

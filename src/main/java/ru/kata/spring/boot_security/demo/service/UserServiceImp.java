@@ -1,8 +1,7 @@
 package ru.kata.spring.boot_security.demo.service;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -14,19 +13,19 @@ import java.util.Optional;
 @Service
 public class UserServiceImp implements UserService {
 
-   private final RegistrationService registrationService;
+   private final PasswordEncoder passwordEncoder;
    private final UserRepository userRepository;
 
    @Autowired
-   public UserServiceImp(RegistrationService registrationService, UserRepository userRepository) {
-       this.registrationService = registrationService;
+   public UserServiceImp(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+       this.passwordEncoder = passwordEncoder;
        this.userRepository = userRepository;
    }
 
    @Transactional
    @Override
    public void save(User user) {
-      registrationService.register(user);
+      this.register(user);
    }
 
    @Transactional(readOnly = true)
@@ -46,14 +45,13 @@ public class UserServiceImp implements UserService {
    @Override
    public void update(User user, long id) {
       user.setId(id);
-      Optional<User> existingUser = userRepository.findById(id);
       if (user.getPassword() == null || user.getPassword().isEmpty()) {
+         Optional<User> existingUser = userRepository.findById(id);
          user.setPassword(existingUser.get().getPassword());
          userRepository.save(user);
       } else {
-         registrationService.register(user);
+         this.register(user);
       }
-
    }
 
    @Transactional
@@ -62,4 +60,16 @@ public class UserServiceImp implements UserService {
       userRepository.deleteById(id);
    }
 
+   @Transactional(readOnly = true)
+   @Override
+   public User findByName(String name) {
+      Optional<User> foundUser = userRepository.findByName(name);
+      return foundUser.orElse(null);
+   }
+
+   @Transactional
+   public void register(User user) {
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+      userRepository.save(user);
+   }
 }

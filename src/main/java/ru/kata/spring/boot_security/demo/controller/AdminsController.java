@@ -6,9 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-import ru.kata.spring.boot_security.demo.repositories.UserRepository;
-import ru.kata.spring.boot_security.demo.service.RegistrationService;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
@@ -18,17 +16,13 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminsController {
 
-    private final RegistrationService registrationService;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @Autowired
-    public AdminsController(RegistrationService registrationService, UserService userService, RoleRepository roleRepository, UserRepository userRepository) {
-        this.registrationService = registrationService;
+    public AdminsController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
     @GetMapping()
@@ -38,7 +32,8 @@ public class AdminsController {
     }
 
     @GetMapping("/show")
-    public String show(@RequestParam("id") long id, Model model) {
+    public String show(@RequestParam("id") long id,
+                       Model model) {
         model.addAttribute("user", userService.show(id));
         return "admin/show";
     }
@@ -46,7 +41,7 @@ public class AdminsController {
     @GetMapping("/new")
     public String newUser(Model model,
                           @ModelAttribute("user") User user) {
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = roleService.findAll();
         model.addAttribute("allRoles", roles);
         return "admin/new";
     }
@@ -62,23 +57,22 @@ public class AdminsController {
     public String edit(Model model,
                        @RequestParam("id") long id) {
         model.addAttribute("user", userService.show(id));
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = roleService.findAll();
         model.addAttribute("allRoles", roles);
         return "admin/edit";
     }
 
-        @PostMapping("/update")
-        public String update(@ModelAttribute("user")  User newUser, @RequestParam("id") long id) {
-
-            userService.update(newUser, id);
-            return "redirect:/admin";
-        }
+    @PostMapping("/update")
+    public String update(@ModelAttribute("user")  User newUser,
+                         @RequestParam("id") long id) {
+        userService.update(newUser, id);
+        return "redirect:/admin";
+    }
 
     @PostMapping("/delete")
     public String delete(@RequestParam("id") long id) {
         userService.delete(id);
         return "redirect:/admin";
     }
-
 
 }

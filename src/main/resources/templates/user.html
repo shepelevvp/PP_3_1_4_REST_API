@@ -5,10 +5,16 @@
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
-    <h1>Профиль пользователя: <p th:text="${user.getName}"></p> </h1>
+    <h1>Профиль пользователя:
+        <p th:text="${user.getName()}"></p>
+        <p th:text="${user.getLastname()}"></p>
+    </h1>
+    <p>Возраст:</p>
+    <p th:text="${user.getAge()}"></p>
+    <p>Электронная почта:":</p>
+    <p th:text="${user.getEmail()}"></p>
     <p>У вас есть следующие права доступа:</p>
     <p th:text="${user.getRoles()}"></p>
-
 
 </body>
 </html>

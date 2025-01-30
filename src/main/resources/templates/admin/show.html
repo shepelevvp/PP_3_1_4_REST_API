@@ -9,8 +9,10 @@
     <div th:replace="fragments/header :: header" />
     <div>
         <h2>Информация о пользователе:</h2>
-        <p th:text="${user.getName}"></p>
-        <p th:text="${user.getPassword()}"></p>
+        <p th:text="${user.getName()}"></p>
+        <p th:text="${user.getLastname()}"></p>
+        <p th:text="${user.getAge()}"></p>
+        <p th:text="${user.getEmail()}"></p>
         <p th:text="${user.getRoles()}"></p>
 
         <a th:href="@{/admin/edit(id=${user.getId()})}">Редактировать</a>

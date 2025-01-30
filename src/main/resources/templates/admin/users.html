@@ -12,6 +12,9 @@
         <table th:border="1">
             <tr>
                 <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Возраст</th>
+                <th>Электронная почта</th>
                 <th>Пароль</th>
                 <th>Роли</th>
             </tr>
@@ -19,6 +22,9 @@
                 <td>
                     <a th:href="@{/admin/show(id=${user.getId()})}" th:utext="${user.getName()}"></a>
                 </td>
+                <td th:utext="${user.getLastname()}"></td>
+                <td th:utext="${user.getAge()}"></td>
+                <td th:utext="${user.getEmail()}"></td>
                 <td th:utext="${user.getPassword()}"></td>
                 <td th:utext="${user.getRoles()}"></td>
             </tr>
