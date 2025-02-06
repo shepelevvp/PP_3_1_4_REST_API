@@ -43,10 +43,9 @@ public class UserServiceImp implements UserService {
 
    @Transactional
    @Override
-   public void update(User user, long id) {
-      user.setId(id);
+   public void update(User user) {
       if (user.getPassword() == null || user.getPassword().isEmpty()) {
-         Optional<User> existingUser = userRepository.findById(id);
+         Optional<User> existingUser = userRepository.findById(user.getId());
          user.setPassword(existingUser.get().getPassword());
          userRepository.save(user);
       } else {
@@ -72,4 +71,11 @@ public class UserServiceImp implements UserService {
       user.setPassword(passwordEncoder.encode(user.getPassword()));
       userRepository.save(user);
    }
+
+   @Transactional
+   public User findByEmail(String email) {
+      return userRepository.findByEmail(email).orElse(null);
+   }
+
+
 }

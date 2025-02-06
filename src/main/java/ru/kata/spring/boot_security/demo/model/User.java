@@ -19,7 +19,7 @@ public class User implements UserDetails {
    @Column(name = "id")
    private Long id;
 
-   @Column(name = "name", unique = true)
+   @Column(name = "name")
    private String name;
 
    @Column(name = "lastname")
@@ -31,7 +31,7 @@ public class User implements UserDetails {
    @Column(name = "age")
    private int age;
 
-   @Column(name = "email")
+   @Column(name = "email", unique = true)
    private String email;
 
    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
@@ -60,7 +60,7 @@ public class User implements UserDetails {
 
    @Override
    public String getUsername() {
-      return name;
+      return email;
    }
 
    @Override
@@ -132,6 +132,15 @@ public class User implements UserDetails {
 
    public void setEmail(String email) {
       this.email = email;
+   }
+
+   public boolean hasRole(String role) {
+      for (Role r : roles) {
+         if (r.getRole().equals(role)) {
+            return true;
+         }
+      }
+      return false;
    }
 
    @Override

@@ -61,4 +61,17 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return this.role;
     }
+
+    public String getReadableRole(String role) {
+        if ("ROLE_ADMIN".equals(role)) {
+            return "ADMIN";
+        }
+        if ("ROLE_USER".equals(role)) {
+            return "USER";
+        }
+        if ("ROLE_GUEST".equals(role)) {
+            return "GUEST";
+        }
+        return role;
+    }
 }
