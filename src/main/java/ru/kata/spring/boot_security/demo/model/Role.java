@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.model;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
@@ -45,16 +46,16 @@ public class Role implements GrantedAuthority {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true; // Проверка на идентичность
-        if (obj == null || getClass() != obj.getClass()) return false; // Проверка на null и класс
-        Role role1 = (Role) obj; // Приведение типа
-        return id == role1.id; // Сравнение по id
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role1 = (Role) o;
+        return Objects.equals(role, role1.role);
     }
 
     @Override
     public int hashCode() {
-        return Long.hashCode(id); // Генерация хэш-кода на основе id
+        return Objects.hash(role);
     }
 
     @Override
@@ -62,16 +63,7 @@ public class Role implements GrantedAuthority {
         return this.role;
     }
 
-    public String getReadableRole(String role) {
-        if ("ROLE_ADMIN".equals(role)) {
-            return "ADMIN";
-        }
-        if ("ROLE_USER".equals(role)) {
-            return "USER";
-        }
-        if ("ROLE_GUEST".equals(role)) {
-            return "GUEST";
-        }
-        return role;
+    public String getReadableRole() {
+        return this.getRole().replace("ROLE_", "");
     }
 }

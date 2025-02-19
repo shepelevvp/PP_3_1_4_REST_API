@@ -37,9 +37,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
          http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/index", "/logout").permitAll()
-                    .antMatchers("/adminpanel/**", "/header").hasRole("ADMIN")
-                    .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                    .antMatchers("/", "/logout", "/static/**").permitAll()
+                    .antMatchers("/api/adminpanel/**").hasRole("ADMIN")
+                    .antMatchers("/api/authUser/**", "/admin/**").hasAnyRole("USER", "ADMIN")
+                //    .anyRequest().permitAll() // временно для запросов postman
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
@@ -50,23 +51,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll();
     }
 
-// аутентификация inMemory
-//    @Bean
-//    @Override
-//    public UserDetailsService userDetailsService() {
-//        UserDetails user =
-//                User.withDefaultPasswordEncoder()
-//                        .username("user")
-//                        .password("user")
-//                        .roles("USER")
-//                        .build();
-//        UserDetails admin =
-//                User.withDefaultPasswordEncoder()
-//                        .username("admin")
-//                        .password("admin")
-//                        .roles("ADMIN")
-//                        .build();
-//
-//        return new InMemoryUserDetailsManager(user, admin);
-//    }
 }

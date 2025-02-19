@@ -5,7 +5,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,6 +24,8 @@ public class User implements UserDetails {
    @Column(name = "id")
    private Long id;
 
+   @NotEmpty(message = "Имя не должно быть пустым")
+   @Size(min = 2, max= 50, message = "Имя должно быть от 2 до 50 символов")
    @Column(name = "name")
    private String name;
 
@@ -29,18 +36,21 @@ public class User implements UserDetails {
    private String password;
 
    @Column(name = "age")
+   @Min(value = 0, message = "Возраст не может быть отрицательным")
    private int age;
 
+   @NotEmpty(message = "Поле Email не должно быть пустым")
+   @Email(message = "Это поле должно быть как email")
    @Column(name = "email", unique = true)
    private String email;
 
-   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+   @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
    @JoinTable(
            name = "users_roles",
            joinColumns = @JoinColumn(name = "user_id"),
            inverseJoinColumns = @JoinColumn(name = "role_id")
    )
-   private Set<Role> roles;
+   private Set<Role> roles = new HashSet<>();
 
    public User() {
    }
