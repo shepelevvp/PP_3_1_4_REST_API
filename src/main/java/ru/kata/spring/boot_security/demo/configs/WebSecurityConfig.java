@@ -39,6 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/", "/logout", "/static/**").permitAll()
                     .antMatchers("/api/adminpanel/**").hasRole("ADMIN")
+                    //.antMatchers("/api/authUser/**", "/admin/**").hasAnyRole("USER", "ADMIN")
                     .antMatchers("/api/authUser/**", "/admin/**").hasAnyRole("USER", "ADMIN")
                 //    .anyRequest().permitAll() // временно для запросов postman
                     .anyRequest().authenticated()
